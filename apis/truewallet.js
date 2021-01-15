@@ -4,13 +4,6 @@ module.exports = {
     redeemvouchers: async function (phone_number, voucher_code) {
         let res;
 		voucher_code = voucher_code.replace('https://gift.truemoney.com/campaign/?v=','');
-        if(!/^[a-zA-Z]*$/i.test(voucher_code)) {
-            res = {
-                status: 'FAIL',
-				reason: 'Vouncher code only allow English characters'
-            };
-            return res;
-        }
         if(voucher_code.length <= 0) {
             res = {
                 status: 'FAIL',
