@@ -1,4 +1,7 @@
-const fetch = require('node-fetch');
+const fetch = require('axios');
+const tls = require("tls");
+
+tls.DEFAULT_MIN_VERSION = "TLSv1.3";
 
 module.exports = {
     redeemvouchers: async function (phone_number, voucher_code) {
@@ -18,16 +21,19 @@ module.exports = {
             };
             return res;
         }
-        const body = {
+        const data = {
             mobile : `${phone_number}`,
             voucher_hash : `${voucher_code}`
         };
         const response = await fetch(`https://gift.truemoney.com/campaign/vouchers/${voucher_code}/redeem`, {
         method: 'post',
-        body: JSON.stringify(body),
-        headers: {'Content-Type': 'application/json'}
+        data: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        })
+        .catch((err) => {
+            return err;
         });
-        const resjson = await response.json();
+        const resjson = response.data ? response.data : response.response.data;
         if(resjson.status.code == 'SUCCESS') {
             res = {
                 status: 'SUCCESS',
